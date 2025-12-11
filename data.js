@@ -1,6 +1,6 @@
-const BASE_JSON_BIN_URL = "https://api.jsonbin.io/v3";
-const BIN_ID = "693a8fe7ae596e708f92427f";
-const MASTER_KEY = "$2a$10$EHGKzk1XCYlaSS1mcR3.hu/tx28452/EU08Rcq2Iub/6qE1/8mQda";
+const JSON_BIN_BASE_URL = "https://api.jsonbin.io/v3";
+const JSON_BIN_ID = "693a8fe7ae596e708f92427f";
+const MASTER_KEY =  "$2a$10$EHGKzk1XCYlaSS1mcR3.hu/tx28452/EU08Rcq2Iub/6qE1/8mQda";
 
 async function loadData() {
     try {
@@ -10,7 +10,7 @@ async function loadData() {
                 "X-Master-Key": MASTER_KEY
             }
         }
-        const response = await axios.get(`${BASE_JSON_BIN_URL}/b/${BIN_ID}/latest`, config);
+        const response = await axios.get(`${JSON_BIN_BASE_URL}/b/${JSON_BIN_ID}/latest`, config);
         return response.data.record;
     } catch (e) {
         // if there is any error of any kind, return an []
@@ -31,7 +31,7 @@ async function saveData(books) {
         // 1. the URL endpoint
         // 2. the data to send over
         // 3. configuration options
-        const response = await axios.put(`${BASE_JSON_BIN_URL}/b/${BIN_ID}`, books, config);
+        const response = await axios.put(`${JSON_BIN_BASE_URL}/b/${JSON_BIN_ID}`, books, config);
         return response.data;
 
     } catch (e) {
@@ -51,22 +51,4 @@ function addBook(books, title, author, pages) {
 
     books.push(newBook);
     saveData(books);
-}
-
-function editBook(books, id, title, author, pages) {
-    const bookIndex = books.findIndex(book => book.id == id);
-    if (bookIndex !== -1) {
-        books[bookIndex].title = title;
-        books[bookIndex].author = author;
-        books[bookIndex].pages = pages;
-        saveData(books);
-    }
-}
-
-function deleteBook(books, id) {
-    const bookIndex = books.findIndex(book => book.id == id);
-    if (bookIndex !== -1) {
-        books.splice(bookIndex, 1);
-        saveData(books);
-    }
 }
